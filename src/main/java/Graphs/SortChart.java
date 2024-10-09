@@ -34,8 +34,8 @@ public class SortChart {
         CategoryPlot plot = barChart.getCategoryPlot();
 
         // Cambia el rango máximo del eje Y para que todos los tiempos se vean mejor
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setRange(0.0, 1.0); // Fija el máximo en 10 segundos
+        //NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        //rangeAxis.setRange(0.0, 1.0); // Fija el máximo en 10 segundos
 
 
 
@@ -51,7 +51,10 @@ public class SortChart {
 
     public static void main(String[] args) throws Exception {
         int[] numbers = FileReaderUtil.readNumbersFromFile("./numbersFiles/OneMillionNumbers.txt");
-        Map<String, Double> results = SortBenchmark.benchmarkSorts(numbers);
+
+        Map<String, Double> resultsSearch = SortBenchmark.benchmarkSearch(numbers);
+        /*Map<String, Double> results = SortBenchmark.benchmarkSorts(numbers);
+
 
         // Ordenar los resultados de mayor a menor tiempo de ejecución
         Map<String, Double> sortedResults = results.entrySet()
@@ -66,9 +69,22 @@ public class SortChart {
         System.out.println("Tiempos de ejecución de los algoritmos (en segundos):");
         sortedResults.forEach((algorithm, time) -> {
             System.out.printf("%s: %.6f segundos%n", algorithm, time);  // Imprimir con 6 decimales
+        });*/
+
+        Map<String, Double> sortedSearchResults = resultsSearch.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+        System.out.println("Tiempos de ejecución de los algoritmos de búsqueda (en segundos):");
+        sortedSearchResults.forEach((algorithm, time) -> {
+            System.out.printf("%s: %.6f segundos%n", algorithm, time);  // Imprimir con 6 decimales
         });
 
         // Generar el gráfico
-        createBarChart(sortedResults);
+        createBarChart(sortedSearchResults);
     }
 }
