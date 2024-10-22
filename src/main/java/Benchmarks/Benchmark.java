@@ -9,7 +9,7 @@ import SearchingAlgorithms.SearchingAlgorithms;
 import SortingAlgorithms.SortingAlgorithms;
 import Utils.FileReaderUtil;
 
-public class SortBenchmark {
+public class Benchmark {
 
     public static double measureSortTime(int[] array, Runnable sortAlgorithm) {
         long startTime = System.nanoTime();
@@ -39,13 +39,13 @@ public class SortBenchmark {
     }
 
     public static Map<String, Double> benchmarkSearch(int[] arr) throws IOException {
-        int numberToFind = FileReaderUtil.readRandomLineFromFile("./numbersFiles/OneMillionNumbers.txt");
+        int numberToFind = FileReaderUtil.readRandomLineFromFile("./numbersFiles/TenThousandNumbers.txt");
         //int numberToFind = 99999999;
         Map<String, Double> resultsSearch = new HashMap<>();
         Arrays.sort(arr);
 
         resultsSearch.put("Lineal Search", measureSortTime(arr, () -> SearchingAlgorithms.linearSearch(arr, numberToFind)));
-        resultsSearch.put("Limited Linear Search", measureSortTime(arr, () -> SearchingAlgorithms.limitedLinearSearch(arr, numberToFind, 1000000)));
+        resultsSearch.put("Limited Linear Search", measureSortTime(arr, () -> SearchingAlgorithms.limitedLinearSearch(arr, numberToFind, 10000)));
         resultsSearch.put("Binary Search", measureSortTime(arr, () -> SearchingAlgorithms.binarySearch(arr, numberToFind)));
         resultsSearch.put("Jump Search", measureSortTime(arr, () -> SearchingAlgorithms.jumpSearch(arr, numberToFind)));
 
