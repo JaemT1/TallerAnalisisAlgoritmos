@@ -1,6 +1,7 @@
 package SortingAlgorithms;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class SortingAlgorithms {
 
@@ -19,55 +20,60 @@ public class SortingAlgorithms {
         }
     }
 
-
-    //----------------------------QUICK SORT ------------------------------------------------------
+    // QuickSort optimizado con pivote aleatorio
     public static void quickSort(int[] arr, int low, int high) {
         if (low < high) {
-            int pi = partition(arr, low, high);
-            quickSort(arr, low, pi - 1);  // Recursivamente ordenar la mitad izquierda
-            quickSort(arr, pi + 1, high); // Recursivamente ordenar la mitad derecha
+            int pi = randomizedPartition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
         }
     }
 
+    // Método que elige un pivote aleatorio
+    private static int randomizedPartition(int[] arr, int low, int high) {
+        Random rand = new Random();
+        int randomPivot = low + rand.nextInt(high - low + 1);
+        swap(arr, randomPivot, high);  // Colocamos el pivote aleatorio al final
+        return partition(arr, low, high);
+    }
+
+    // Partición estándar de QuickSort
     private static int partition(int[] arr, int low, int high) {
         int pivot = arr[high];
-        int i = (low - 1); // Índice del elemento más pequeño
+        int i = (low - 1);
         for (int j = low; j < high; j++) {
-            if (arr[j] < pivot) {
+            if (arr[j] <= pivot) {
                 i++;
-                // Intercambia arr[i] y arr[j]
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
+                swap(arr, i, j);
             }
         }
-        // Intercambia arr[i+1] y arr[high] (el pivote)
-        int temp = arr[i + 1];
-        arr[i + 1] = arr[high];
-        arr[high] = temp;
+        swap(arr, i + 1, high);
         return i + 1;
     }
 
+    // Método auxiliar para intercambiar elementos
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 
-    //----------------------------STOOGE SORT ------------------------------------------------------
-    public static void stoogeSort(int[] arr, int l, int h) {
-        if (l >= h) {
-            return;
+
+    public static void stoogeSort(int[] L) {
+        stoogeSort(L, 0, L.length - 1);
+    }
+
+    public static void stoogeSort(int[] L, int i, int j) {
+        if (L[j] < L[i]) {
+            int tmp = L[i];
+            L[i] = L[j];
+            L[j] = tmp;
         }
-
-        // Si el primer elemento es mayor que el último, intercambiarlos
-        if (arr[l] > arr[h]) {
-            int temp = arr[l];
-            arr[l] = arr[h];
-            arr[h] = temp;
-        }
-
-        // Si hay más de 2 elementos
-        if (h - l + 1 > 2) {
-            int t = (h - l + 1) / 3;
-            stoogeSort(arr, l, h - t);   // Ordena los primeros 2/3
-            stoogeSort(arr, l + t, h);   // Ordena los últimos 2/3
-            stoogeSort(arr, l, h - t);   // Vuelve a ordenar los primeros 2/3
+        if (j - i > 1) {
+            int t = (j - i + 1) / 3;
+            stoogeSort(L, i, j - t);
+            stoogeSort(L, i + t, j);
+            stoogeSort(L, i, j - t);
         }
     }
 
